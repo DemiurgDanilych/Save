@@ -1,13 +1,11 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.*;
+import java.util.zip.*;
 
 public class Main {
 	
 	public static int version = 0;
-	public static String route = "C:\\Games\\savegames\\";
+	public static String path = "\\Games\\savegames\\";
 	public static List<String> routeSavesArr = new ArrayList<>();
 	
 	public static void main(String[] args) throws IOException {
@@ -17,27 +15,25 @@ public class Main {
 		GameProgress save2 = new GameProgress(75, 1, 8, 621);
 		GameProgress save3 = new GameProgress(20, 10, 10, 730);
 		
-		saveGame(route, save1);
-		saveGame(route, save2);
-		saveGame(route, save3);
-		
-		
-		System.out.println(routeSavesArr.toString());
-		zipFiles(route,routeSavesArr);
+		saveGame(path, save1);
+		saveGame(path, save2);
+		saveGame(path, save3);
+
+		zipFiles(path,routeSavesArr);
 	}
 	
-	private static void saveGame(String route, GameProgress save) {
-		try (FileOutputStream fos = new FileOutputStream(route + "save" + (version = (version + 1)) + ".dat");
+	private static void saveGame(String path, GameProgress save) {
+		try (FileOutputStream fos = new FileOutputStream(path + "save" + (version = (version + 1)) + ".dat");
 			 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 			oos.writeObject(save);
-			routeSavesArr.add(route + "save" + version + ".dat");
+			routeSavesArr.add(path + "save" + version + ".dat");
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
 	
-	private static void zipFiles(String route, List<String> routeSavesArr) throws IOException {
-		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(route + "savesZip.zip"));
+	private static void zipFiles(String path, List<String> routeSavesArr) throws IOException {
+		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(path + "savesZip.zip"));
 		
 			for (String routeSave : routeSavesArr) {
 				ZipEntry entry = new ZipEntry(routeSave);
@@ -48,4 +44,3 @@ public class Main {
 			zout.close();
 		}
 	}
-	
